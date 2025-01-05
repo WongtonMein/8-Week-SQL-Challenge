@@ -60,9 +60,10 @@ GROUP BY customer_id
 ORDER BY customer_id;
 ```
 Steps Taken:
- - Select the customer_id and COUNT the days visited per customer. DISTINCT is included in the COUNT statement to return only unique values
-- The COUNT (or aggregated) results are then grouped by customer_id using the GROUP BY function
-- The customer_id values are then arranged in order alphabetically using the ORDER BY function
+ - Select the customer_id and COUNT the days visited per customer
+   - DISTINCT is included in the COUNT statement to only return unique values as a customer may have ordered multiple items on the same day
+ - The COUNT (or aggregated) results are then grouped by customer_id using the GROUP BY function
+ - The customer_id values are then arranged in order alphabetically using the ORDER BY function
 
 Results:
 | customer_id | total_days_visited |
@@ -76,3 +77,7 @@ Results:
 - Customer C visited 2 days
 
 ***
+
+**3. What was the first item from the menu purchased by each customer?**
+
+TBD
