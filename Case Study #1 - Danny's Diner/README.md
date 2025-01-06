@@ -122,6 +122,26 @@ Results:
 - Customer B ordered curry
 - Customer C ordered ramen
 
+Another option is to write this query using a subquery rather than a CTE. However, a CTE only needs to be defined once and can be used recursively whereas a subquery cannot.
+
+```sql
+SELECT
+  customer_id,
+  product_name
+FROM (
+  SELECT
+    sales.customer_id,
+    menu.product_name,
+    DENSE_RANK() OVER(
+      PARTITION BY sales.customer_id
+      ORDER BY sales.order_date) AS rank
+  FROM dannys_diner.sales
+  JOIN dannys_diner.menu
+    ON sales.product_id = menu.product_id) ordered_sales
+WHERE rank = 1
+GROUP BY customer_id, product_name;
+```
+
 ***
 
 **4. What is the most purchased item on the menu and how many times was it purchased by all customers?**
