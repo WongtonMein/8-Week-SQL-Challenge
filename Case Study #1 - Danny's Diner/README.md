@@ -168,6 +168,8 @@ Results:
 | ramen | 8 |
 - The most ordered item is ramen having been ordered eight times.
 
+***
+
 **5. Which item was the most popular for each customer?**
 
 ```sql
@@ -209,6 +211,8 @@ Results:
 - Customer A's most popular item was ramen
 - Customer B's most popular items were ramen, curry, and sushi equally
 - Customer C's most popular item was ramen
+
+***
 
 **6. Which item was purchased first by the customer after they became a member?**
 
@@ -254,4 +258,55 @@ Results:
 - Customer A's first item purchased as a member was curry
 - Customer B's first item purchased as a member was sushi
 
+***
 
+**Which item was purchased just before the customer became a member?**
+```sql
+WITH member_orders AS (
+  SELECT
+    sales.customer_id,
+    menu.product_name,
+    DENSE_RANK() OVER(
+      PARTITION BY sales.customer_id
+      ORDER BY sales.order_date DESC) AS rank
+    FROM dannys_diner.sales
+    JOIN dannys_diner.menu
+      ON sales.product_id = menu.product_id
+    JOIN dannys_diner.members
+      ON sales.customer_id = members.customer_id
+  WHERE members.join_date > sales.order_date
+  GROUP BY sales.customer_id, menu.product_name, sales.order_date
+)
+
+SELECT
+  customer_id,
+  product_name
+FROM member_orders
+WHERE rank = 1;
+```
+
+Steps Taken:
+ - This question is very similar to the one prior with some changes to account for the customer's item purchase prior to becoming a member
+ - We will build a CTE again with customer_id, product_name, and the **DENSE_RANK** window function
+ - The DENSE_RANK() window function will be **PARTITION BY** the customer_id and ORDER BY** the order_date in descending order
+   - By ordering in descending order, this will rank the most recent order dates first
+- We then JOIN the Sales and Menu tables via their respective product_id values and the Sales and Members tables via their respective customer_id values
+- We then apply a filter **WHERE** the join_date value is less than or equal to the order_date so only orders that were placed the same day as a customer's membership join date or later are included
+- Results are then grouped by the customer_id, product_name, and order_date
+- In our SELECT statement, we select the customer_id and product_name from our CTE and filter **WHERE rank = 1**
+
+Results:
+| customer_id | product_name |
+|---|---|
+| A | curry |
+| A | sushi |
+| B | sushi |
+
+- Customer A ordered curry and sushi before they became a member
+- Customer B ordered sushi before they became a member
+
+***
+
+**8. What is the total items and amount spent for each member before they became a member?**
+
+TBD
