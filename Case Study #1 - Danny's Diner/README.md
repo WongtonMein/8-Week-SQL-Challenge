@@ -309,4 +309,71 @@ Results:
 
 **8. What is the total items and amount spent for each member before they became a member?**
 
-TBD
+```sql
+SELECT
+    sales.customer_id,
+    COUNT(sales.product_id) AS total_items_ordered,
+    SUM(menu.price) AS total_amount_spent
+FROM dannys_diner.sales
+JOIN dannys_diner.menu
+  ON sales.product_id = menu.product_id
+JOIN dannys_diner.members
+  ON sales.customer_id = members.customer_id
+WHERE members.join_date > sales.order_date
+GROUP BY sales.customer_id
+ORDER BY sales.customer_id
+```
+
+Steps Taken:
+- We need to JOIN all three tables together now
+  - Sales with Menu on their product_id values
+  - Sales with Members on their customer_id values
+- We then SELECT the customer_id, run a COUNT on the sales.product_id column to determine the total_items_ordered, and run a SUM on the menu.price for the total_amount_spent
+- We then apply filter WHERE members.join_date is greater than sales.order_date
+  - This ensures all orders are after customers have become a member
+- We then GROUP BY and ORDER BY the customer_id
+
+Results: 
+| customer_id | total_items_ordered | total_amount_spent |
+|---|---|---|
+| A | 2 | 25 |
+| B | 3 | 40 |
+
+- Customer A ordered two items and spent $25 before becoming a member
+- Customer B ordered three items and spent $40 before becoming a member
+
+***
+
+**9. If each $1 spent equates to 10 points and sushi has a 2x points multiplier - how many points would each customer have?**
+
+*This question assumes customers became a member before making any purchases
+
+```sql
+SELECT
+    sales.customer_id,
+    SUM(CASE
+	  WHEN menu.product_id = 1 THEN price * 20
+	  ELSE price * 10
+	END) AS total_points_earned
+FROM dannys_diner.sales
+JOIN dannys_diner.menu
+  ON sales.product_id = menu.product_id
+GROUP BY sales.customer_id
+ORDER BY sales.customer_id;
+```
+
+Steps Taken:
+- We JOIN Sales with Menu on their product_id values
+- This problem uses a SUM function with a relatively simple **CASE WHEN** expression inside
+  - WHEN (or if) the product_id is 1, then the price is multiplied by 20
+  - ELSE the price is multiplied by 10
+- The summed values are then GROUP BY and ORDER BY customer_id
+
+Results:
+| customer_id | total_points_earned |
+|---|---|
+| A | 860 |
+| B | 940 |
+| C | 360 |
+
+- Customer A would have earned 860 points 
