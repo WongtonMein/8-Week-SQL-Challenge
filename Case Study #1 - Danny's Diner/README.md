@@ -376,4 +376,59 @@ Results:
 | B | 940 |
 | C | 360 |
 
-- Customer A would have earned 860 points 
+- Customer A would have earned 860 points
+- Customer B would have earned 940 points
+- Customer C would have earned 360 points
+
+***
+
+**10. In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi - how many points do customer A and B have at the end of January?**
+
+```sql
+SELECT
+    sales.customer_id,
+    SUM(CASE
+        WHEN (sales.order_date >= members.join_date) 
+        AND (sales.order_date <= members.join_date + INTERVAL '6 days') 
+        OR (menu.product_id = 1) THEN price * 20
+        ELSE price * 10
+    END) AS total_points_earned
+FROM dannys_diner.sales
+JOIN dannys_diner.menu
+    ON sales.product_id = menu.product_id
+JOIN dannys_diner.members
+    ON sales.customer_id = members.customer_id
+WHERE 
+    EXTRACT(MONTH FROM sales.order_date) < 2
+    AND members.join_date <= sales.order_date
+GROUP BY sales.customer_id
+ORDER BY sales.customer_id;
+```
+
+Steps Taken:
+- This question is an extension of the previous question with additional filtering in the **CASE WHEN** statement
+- In addition to sushi (product_id = 1), all items are worth double the points for the first week a customer joins the restaurant's membership program
+- In our CASE WHEN, we state that:
+  - WHEN (or if) the order_date is greater than or equal to the join_date and is less than or equal to six days after the join_date OR if the product_id = 1 (for sushi), the price is multipled by 20
+  - ELSE the price is multiplied by 10
+- Additionally, the question is asking for customer A and B's points by the end of January. In other words, only orders from their respective membership join dates through the end of January
+- We then apply two filters in our **WHERE** clause
+  - The first is the month must be less than 2
+  - The second being the join_date must be less than or equal to the order_date
+
+Results:
+| customer_id | total_points_earned |
+|---|---|
+| A | 1020 |
+| B | 320 |
+
+- Customer A earned 1020 points by the end of January since they joined the program
+- Customer B earned 320 points by the end of January since they joined the program
+
+***
+
+## BONUS QUESTIONS
+
+**Join All The Things**
+
+TBD
