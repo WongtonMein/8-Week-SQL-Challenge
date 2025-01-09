@@ -431,4 +431,107 @@ Results:
 
 **Join All The Things**
 
-TBD
+```sql
+SELECT
+  sales.customer_id,
+  sales.order_date,
+  menu.product_name,
+  menu.price,
+  CASE WHEN members.join_date <= sales.order_date THEN 'Y'
+ELSE 'N' END AS member
+FROM dannys_diner.sales
+JOIN dannys_diner.menu
+  ON sales.product_id = menu.product_id
+FULL JOIN dannys_diner.members
+  ON sales.customer_id = members.customer_id
+ORDER BY sales.customer_id, sales.order_date, menu.product_name;
+```
+
+Steps Taken:
+- This question is asking us to JOIN all three tables together and show all the relevant information
+- Additionally, it is asking us to state whether a customer was a member or not when they had placed an order
+- We'll go ahead and start by selecting the customer_id, order_date, product_name, and price from their respective tables
+- We'll then write a **CASE WHEN** statement where if the join_date is less than or equal to the order_date, then we will list 'Y' that the customer was a member when this order was placed. Otherwise, we will say 'N' that they were not a a member at the time
+- We will then JOIN Sales with Menu on their product_id values
+- We then need to use a **FULL JOIN** for Sales and Members on their customer_id values as this will include Customer C who has not signed up for the restaurant's membership program
+
+Results:
+| customer_id | order_date | product_name | price | member |
+|---|---|---|---|---|
+| A | 2021-01-01 | curry | 15 | N |
+| A | 2021-01-01 | sushi | 10 | N |
+| A | 2021-01-07 | curry | 15 | Y |
+| A | 2021-01-10 | ramen | 12 | Y |
+| A | 2021-01-11 | ramen | 12 | Y |
+| A | 2021-01-11 | ramen | 12 | Y |
+| B | 2021-01-01 | curry | 15 | N |
+| B | 2021-01-02 | curry | 15 | N |
+| B | 2021-01-04 | sushi | 10 | N |
+| B | 2021-01-11 | sushi | 10 | Y |
+| B | 2021-01-16 | ramen | 12 | Y |
+| B | 2021-02-01 | ramen | 12 | Y |
+| C | 2021-01-01 | ramen | 12 | N |
+| C | 2021-01-01 | ramen | 12 | N |
+| C | 2021-01-07 | ramen | 12 | N |
+
+***
+
+**Rank All The Things**
+
+```sql
+WITH customer_cte AS (
+  SELECT
+    sales.customer_id,
+    sales.order_date,
+    menu.product_name,
+    menu.price,
+    CASE WHEN members.join_date <= sales.order_date THEN 'Y'
+	ELSE 'N' END AS member
+FROM dannys_diner.sales
+JOIN dannys_diner.menu
+  ON sales.product_id = menu.product_id
+FULL JOIN dannys_diner.members
+  ON sales.customer_id = members.customer_id
+ORDER BY sales.customer_id, sales.order_date, menu.product_name
+)
+
+SELECT
+    customer_id,
+    order_date,
+    product_name,
+    price,
+    member,
+    CASE WHEN member = 'Y' THEN
+	RANK() OVER(
+	    PARTITION BY customer_id, member
+	    ORDER BY order_date)
+	ELSE NULL END AS ranking
+FROM customer_cte;
+```
+
+Steps Taken:
+- Conveniently enough, we can use our solution from "Join All The Things" as a CTE for this question
+- Outside of the CTE in our SELECT statement, we select the customer_id, order_date, product_name, price, and membership stats "member"
+- We then write a **CASE WHEN** statement where if the customer's status as a member is 'Y', we then have a window function where we **RANK()** the order a customer purchased menu items
+- We first **PARTITION BY** the customer_id and then member status
+- We then **ORDER BY** order_date to ensure we are ranking item orders chronologically
+- To close our CASE WHEN statement, if the customer's status as a member is not 'Y' when the order was placed, we set the value to NULL
+
+Results:
+| customer_id | order_date | product_name | price | member | ranking |
+|---|---|---|---|---|---|
+| A | 2021-01-01 | curry | 15 | N | null |
+| A | 2021-01-01 | sushi | 10 | N | null |
+| A | 2021-01-07 | curry | 15 | Y | 1 |
+| A | 2021-01-10 | ramen | 12 | Y | 2 |
+| A | 2021-01-11 | ramen | 12 | Y | 3 |
+| A | 2021-01-11 | ramen | 12 | Y | 3 |
+| B | 2021-01-01 | curry | 15 | N | null |
+| B | 2021-01-02 | curry | 15 | N | null |
+| B | 2021-01-04 | sushi | 10 | N | null |
+| B | 2021-01-11 | sushi | 10 | Y | 1 |
+| B | 2021-01-16 | ramen | 12 | Y | 2 |
+| B | 2021-02-01 | ramen | 12 | Y | 3 |
+| C | 2021-01-01 | ramen | 12 | N | null |
+| C | 2021-01-01 | ramen | 12 | N | null |
+| C | 2021-01-07 | ramen | 12 | N | null |
