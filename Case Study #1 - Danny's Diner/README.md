@@ -1,6 +1,6 @@
 # 🍜 [Case Study #1 - Danny's Diner](https://8weeksqlchallenge.com/case-study-1/)
 
-![Alt text](https://github.com/WongtonMein/8-Week-SQL-Challenge/blob/main/Case%20Study%20%231%20-%20Danny's%20Diner/Wk1%20-%20Danny's%20Diner%2050%25.png?raw=true)
+![Alt text](https://github.com/WongtonMein/8-Week-SQL-Challenge/blob/main/Case%20Study%20%231%20-%20Danny's%20Diner/Wk1%20-%20Danny's%20Diner%2050%25.png)
 
 
 ## 📚 Table of Contents
@@ -13,7 +13,7 @@ Danny wants to use the data to answer a few simple questions about his customers
 
 ## Entity Relationship Diagram
 
-![Alt text](https://github.com/WongtonMein/8-Week-SQL-Challenge/blob/main/Case%20Study%20%231%20-%20Danny's%20Diner/Wk1%20-%20Entity%20Relationship%20Diagram.png?raw=true)
+![Alt text](https://github.com/WongtonMein/8-Week-SQL-Challenge/blob/main/Case%20Study%20%231%20-%20Danny's%20Diner/Wk1%20-%20Entity%20Relationship%20Diagram.png)
 
 ## Questions and Solutions
 
