@@ -1,6 +1,6 @@
 # 🍕 [Case Study #2 - Pizza Runner](https://8weeksqlchallenge.com/case-study-2/)
 
-![Alt text](https://github.com/WongtonMein/8-Week-SQL-Challenge/blob/main/Case%20Study%20%232%20-%20Pizza%20Runner/Wk2%20-%20Pizza%20Runner%2050%25.png?raw=true)
+![Alt text](https://github.com/WongtonMein/8-Week-SQL-Challenge/blob/main/Case%20Study%20%232%20-%20Pizza%20Runner/Wk2%20-%20Pizza%20Runner%2050%25.png)
 
 
 ## 📚 Table of Contents
@@ -13,7 +13,7 @@ Danny has prepared for us an entity relationship diagram of his database design 
 
 ## Entity Relationship Diagram
 
-![Alt text](https://github.com/WongtonMein/8-Week-SQL-Challenge/blob/main/Case%20Study%20%232%20-%20Pizza%20Runner/Wk2%20-%20Entity%20Relationship%20Diagram.png?raw=true)
+![Alt text](https://github.com/WongtonMein/8-Week-SQL-Challenge/blob/main/Case%20Study%20%232%20-%20Pizza%20Runner/Wk2%20-%20Entity%20Relationship%20Diagram.png)
 
 ## Questions and Solutions
 
