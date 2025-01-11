@@ -1,6 +1,7 @@
-# 🍜 Case Study #1 - Danny's Diner
+# 🍜 [Case Study #1 - Danny's Diner](https://8weeksqlchallenge.com/case-study-1/)
 
 ![Alt text](https://github.com/WongtonMein/8-Week-SQL-Challenge/blob/main/Case%20Study%20%231%20-%20Danny's%20Diner/Wk1%20-%20Danny's%20Diner%2050%25.png?raw=true)
+
 
 ## 📚 Table of Contents
 - [Objectives](https://github.com/WongtonMein/8-Week-SQL-Challenge/blob/main/Case%20Study%20%231%20-%20Danny's%20Diner/README.md#objectives)
