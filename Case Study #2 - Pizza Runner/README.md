@@ -9,7 +9,7 @@
 - [Questions and Solutions](https://github.com/WongtonMein/8-Week-SQL-Challenge/edit/main/Case%20Study%20%232%20-%20Pizza%20Runner/README.md#questions-and-solutions)
 
 ## 📋 Objectives
-Danny wants to use the data to answer a few simple questions about his customers, especially about their visiting patterns, how much money they’ve spent and also which menu items are their favourite.
+Danny has prepared for us an entity relationship diagram of his database design but requires further assistance to clean his data and apply some basic calculations so he can better direct his runners and optimise Pizza Runner’s operations.
 
 ## Entity Relationship Diagram
 
