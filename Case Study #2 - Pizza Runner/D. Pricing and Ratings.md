@@ -1,0 +1,1 @@
+# D. Pricing and Ratings
