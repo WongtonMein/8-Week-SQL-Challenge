@@ -19,12 +19,12 @@ Danny has prepared for us an entity relationship diagram of his database design 
 
 Feel free to join me in writing and executing queries using PostgreSQL in [DB Fiddle](https://www.db-fiddle.com/f/7VcQKQwsS3CTkGRFG7vu98/65)
 
-**A. Pizza Metrics**
+[**A. Pizza Metrics**](https://github.com/WongtonMein/8-Week-SQL-Challenge/blob/main/Case%20Study%20%232%20-%20Pizza%20Runner/A.%20Pizza%20Metrics.md)
 
-**B. Runner and Customer Experience**
+[**B. Runner and Customer Experience**](https://github.com/WongtonMein/8-Week-SQL-Challenge/blob/main/Case%20Study%20%232%20-%20Pizza%20Runner/B.%20Runner%20and%20Customer%20Experience.md)
 
-**C. Ingredient Optimisation**
+[**C. Ingredient Optimisation**](https://github.com/WongtonMein/8-Week-SQL-Challenge/blob/main/Case%20Study%20%232%20-%20Pizza%20Runner/C.%20Ingredient%20Optimisation.md)
 
-**D. Pricing and Ratings**
+[**D. Pricing and Ratings**](https://github.com/WongtonMein/8-Week-SQL-Challenge/blob/main/Case%20Study%20%232%20-%20Pizza%20Runner/D.%20Pricing%20and%20Ratings.md)
 
-**E. Bonus Questions**
+[**E. Bonus Questions**](https://github.com/WongtonMein/8-Week-SQL-Challenge/blob/main/Case%20Study%20%232%20-%20Pizza%20Runner/E.%20Bonus%20Questions.md)
