@@ -56,6 +56,42 @@ FROM pizza_runner.customer_orders;
 
 ### Table 3: runner_orders
 
+```sql
+CREATE TEMP TABLE runner_orders_temp AS
+SELECT
+  order_id,
+  runner_id,
+  CASE
+    WHEN pickup_time IS NULL OR pickup_time LIKE 'null' THEN ''
+    ELSE pickup_time
+    END AS pickup_time,
+  CASE
+    WHEN distance IS NULL OR distance LIKE 'null' THEN ''
+    WHEN distance LIKE '%km' THEN TRIM('km' FROM distance)
+    ELSE distance
+    END AS distance,
+  CASE
+    WHEN duration IS NULL or duration LIKE 'null' THEN ''
+    WHEN duration LIKE '%mins' THEN TRIM('mins' FROM duration)
+    WHEN duration LIKE '%minute' THEN TRIM('minute' FROM duration)
+    WHEN duration LIKE '%minutes' THEN TRIM('minutes' FROM duration)
+    ELSE duration
+    END AS duration,
+  CASE
+    WHEN cancellation IS NULL OR cancellation LIKE 'null' or cancellation LIKE 'NaN' THEN ''
+    ELSE cancellation
+    END AS cancellation
+FROM pizza_runner.runner_orders;
+```
+
+```sql
+ALTER TABLE runner_orders_temp
+ALTER COLUMN pickup_time TYPE timestamp,
+ALTER COLUMN distance TYPE FLOAT,
+ALTER COLUMN duration TYPE INT;
+```
+
+
 ## Questions and Solutions
 
 Feel free to join me in writing and executing queries using PostgreSQL in [DB Fiddle](https://www.db-fiddle.com/f/7VcQKQwsS3CTkGRFG7vu98/65)
