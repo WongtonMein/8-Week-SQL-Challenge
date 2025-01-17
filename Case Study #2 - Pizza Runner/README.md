@@ -7,6 +7,7 @@
 - [Objectives](https://github.com/WongtonMein/8-Week-SQL-Challenge/edit/main/Case%20Study%20%232%20-%20Pizza%20Runner/README.md#-objectives)
 - [Entity Relationsihp Diagram](https://github.com/WongtonMein/8-Week-SQL-Challenge/edit/main/Case%20Study%20%232%20-%20Pizza%20Runner/README.md#entity-relationship-diagram)
 - [Questions and Solutions](https://github.com/WongtonMein/8-Week-SQL-Challenge/edit/main/Case%20Study%20%232%20-%20Pizza%20Runner/README.md#questions-and-solutions)
+- [Data Cleanup and Transformation](https://github.com/WongtonMein/8-Week-SQL-Challenge/blob/main/Case%20Study%20%232%20-%20Pizza%20Runner/README.md#data-cleanup-and-transformation)
 
 ## 📋 Objectives
 Danny has prepared for us an entity relationship diagram of his database design but requires further assistance to clean his data and apply some basic calculations so he can better direct his runners and optimise Pizza Runner’s operations.
@@ -33,13 +34,13 @@ Feel free to join me in writing and executing queries using PostgreSQL in [DB Fi
 
 ### Table 2: customer_orders
 
+![Alt text](https://github.com/WongtonMein/8-Week-SQL-Challenge/blob/main/Case%20Study%20%232%20-%20Pizza%20Runner/Wk2%20-%20customer_orders_table.png)
+
 Looking at Table 2: customer_orders, we can see the following:
  - In the `exclusions` column, there are several `null` values and missing or blank spaces
  - In the `extras` column, there are several `null` and `NaN` values as well as missing or blank spaces
 
 These will need to cleaned up before we can begin answering the case study questions
-
-![Alt text](https://github.com/WongtonMein/8-Week-SQL-Challenge/blob/main/Case%20Study%20%232%20-%20Pizza%20Runner/Wk2%20-%20customer_orders_table.png)
 
 Steps Taken:
 - Remove any '' values from the `exclusions` column and replace them with a `null` value
@@ -69,15 +70,15 @@ FROM pizza_runner.customer_orders;
 
 ### Table 3: runner_orders
 
+![Alt text](https://github.com/WongtonMein/8-Week-SQL-Challenge/blob/main/Case%20Study%20%232%20-%20Pizza%20Runner/Wk2%20-%20runner_orders_table.png)
+
 Looking at Table 3: runner_orders, we can see the following:
  - In the `pickup_time` column, there are a few `null` values
- - In the `distance` column, there are several `null` values and distances with units of measure
- - In the `duration` column, there are several `null` values and durations with units of measure
- - In the `cancellation` column, there are several `null` values and missing or blank spaces
+ - In the `distance` column, there are a few `null` values and distances with units of measure
+ - In the `duration` column, there are a few `null` values and durations with units of measure
+ - In the `cancellation` column, there are a few `null` values and missing or blank spaces
 
 These will need to cleaned up before we can begin answering the case study questions
-
-![Alt text](https://github.com/WongtonMein/8-Week-SQL-Challenge/blob/main/Case%20Study%20%232%20-%20Pizza%20Runner/Wk2%20-%20runner_orders_table.png)
 
 Steps Taken:
 - Remove any potential '' values from the `exclusions` column and replace them with a `null` value
