@@ -116,7 +116,7 @@ Steps Taken:
 - On the first COUNT, we apply a FILTER WHERE the pizza_id = 1
   - This is aliased as "Meatlovers"
 - On the second COUNT, we apply a FILTER WEHRE the pizza-Id = 2
-  - This is aliased as "vegetarian"
+  - This is aliased as "Vegetarian"
 - We then GROUP BY and ORDER BY customer_id
 
 Results:
@@ -155,7 +155,7 @@ Steps Taken:
 - We then **JOIN** customer_orders_temp with runner_orders_temp on their order_id values
 - In our WHERE clause, we filter WHERE pickup_time IS NOT NULL
 - We then GROUP BY order_id and ORDER BY the pizza_id count in descending order
-- Lastly, we limit our results to one to show the maximum numbers of pizzas delievered in a single order
+- Lastly, we limit our results to one to show the maximum numbers of pizzas delivered in a single order
 
 Results:
 | order_id | max_pizzas_delivered |
@@ -188,7 +188,7 @@ Steps Taken:
 - SELECT the customer_id and two lines where we **COUNT** all pizza_id values from our temporary table, customer_orders_temp
 - On the first COUNT, we apply a FILTER WHERE either `exclusions` or `extras` are not NULL
   - This is aliased as "change"
-- On the second COUNT, we apply a FILTER WEHRE both `exclusions` and `extras` are NULL
+- On the second COUNT, we apply a FILTER WHERE both `exclusions` and `extras` are NULL
   - This is aliased as "no_change"
 - We then **JOIN** customer_orders_temp with runner_orders_temp on their order_id values
 - In our WHERE clause, we filter WHERE pickup_time IS NOT NULL
@@ -275,3 +275,31 @@ Results:
 
 **10. What was the volume of orders for each day of the week?**
 
+```sql
+SELECT
+  EXTRACT(DOW FROM order_time) + 1 AS day_of_week,
+  COUNT(pizza_id) AS pizzas_ordered
+FROM customer_orders_temp
+GROUP BY day_of_week
+ORDER BY day_of_week;
+```
+Steps Taken:
+ - This is similar to the previous question, A9
+ - We **EXTRACT** the day of the week (**DOW**) from the `order_time` column and alias this as 'day_of_week'
+   - I added +1 to the DOW value for easier mental conversion from numeric day of week to actual name
+   - Otherwise 0 = Sunday, 1 = Monday, etc.
+ - pizza_id values are counted
+ - We then both GROUP BY and ORDER BY 'hour'
+
+Results:
+| day_of_week | pizzas_ordered |
+|---|---|
+| 4 | 5 |
+| 5 | 3 |
+| 6 | 1 |
+| 7 | 5 |
+
+- Five pizzas were ordered on the 4th day of the week, Wednesday
+- Three pizzas were ordered on the 5th day of the week, Thursday
+- One pizza was ordered on the 6th day of the week, Friday
+- Five pizzas were ordered on the 7th day of the week, Saturday
