@@ -213,6 +213,30 @@ Results:
 
 **8. How many pizzas were delivered that had both exclusions and extras?**
 
+```sql
+SELECT
+  COUNT(pizza_id) FILTER(
+    WHERE exclusions IS NOT NULL AND 
+    	  extras IS NOT NULL) AS has_exclusion_and_extra
+FROM customer_orders_temp c
+JOIN runner_orders_temp r
+  ON c.order_id = r.order_id
+WHERE pickup_time IS NOT NULL;
+```
+Steps Taken:
+ - This question is similar to the previous question, A7
+ - We will **COUNT** pizza_id values from our temporary table, customer_orders_temp
+ - On our count, we apply a FILTER WHERE both `exclusions` and `extras` are not NULL
+- We then **JOIN** customer_orders_temp with runner_orders_temp on their order_id values
+- We then filter WHERE pickup_time IS NOT NULL
+
+Results:
+| has_exclusion_and_extra |
+|---|
+| 1 |
+
+- There is one pizza delivered that has at least one exclusion and one extra
+
 ***
 
 **9. What was the total volume of pizzas ordered for each hour of the day?**
