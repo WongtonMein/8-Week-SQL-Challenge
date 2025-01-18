@@ -227,8 +227,8 @@ Steps Taken:
  - This question is similar to the previous question, A7
  - We will **COUNT** pizza_id values from our temporary table, customer_orders_temp
  - On our count, we apply a FILTER WHERE both `exclusions` and `extras` are not NULL
-- We then **JOIN** customer_orders_temp with runner_orders_temp on their order_id values
-- We then filter WHERE pickup_time IS NOT NULL
+ - We then **JOIN** customer_orders_temp with runner_orders_temp on their order_id values
+ - We then filter WHERE pickup_time IS NOT NULL
 
 Results:
 | has_exclusion_and_extra |
@@ -240,6 +240,36 @@ Results:
 ***
 
 **9. What was the total volume of pizzas ordered for each hour of the day?**
+
+```sql
+SELECT
+  EXTRACT(HOUR FROM order_time) AS hour,
+  COUNT(pizza_id) AS pizzas_ordered
+FROM customer_orders_temp
+GROUP BY hour
+ORDER BY hour;
+```
+Steps Taken:
+ - We **EXTRACT** the hour from the `order_time` column and alias this as 'hour'
+ - pizza_id values are counted
+ - We then both GROUP BY and ORDER BY 'hour'
+
+Results:
+| hour | pizzas_ordered |
+|---|---|
+| 11 | 1 |
+| 13 | 3 |
+| 18 | 3 |
+| 19 | 1 |
+| 21 | 3 |
+| 23 | 3 |
+
+ - One pizza was ordered on the 11th hour
+ - Three pizzas were ordered on the 13th hour
+ - Three pizzas were ordered on the 18th hour
+ - One pizza was ordered on the 19th hour
+ - Three pizzas were ordered on the 21st hour
+ - Three pizzas were ordered on the 23rd hour
 
 ***
 
