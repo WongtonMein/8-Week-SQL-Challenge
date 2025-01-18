@@ -10,6 +10,7 @@ FROM customer_orders_temp;
 Steps Taken:
 - **COUNT** all pizza_id values from our temporary table, customer_orders_temp
 
+Results:
 | ordered_pizzas |
 |---|
 | 14 |
@@ -29,6 +30,7 @@ Steps Taken:
 - **COUNT** all order_id values from our temporary table, customer_orders_temp
 - We add the **DISTINCT** keyword to return unique values
 
+Results:
 | unique_customer_orders |
 |---|
 | 10 |
@@ -49,9 +51,10 @@ ORDER BY runner_id;
 ```
 Steps Taken:
 - SELECT the runner_id and **COUNT** all order_id values from our temporary table, customer_orders_temp
-- Additionally, we will **FILTER** our order_id count WHERE the pickup_time is not NULL to ensure we query successful pickups
+- Additionally, we will **FILTER** our order_id count WHERE the `pickup_time` is not NULL to ensure we query successful pickups
 - We then GROUP BY and ORDER BY the runner_id
 
+Results:
 | runner_id | successful_orders_delivered |
 |---|---|
 | 1 | 4 |
@@ -84,9 +87,10 @@ Steps Taken:
 - SELECT the pizza_id, pizza_name, and **COUNT** all pizza_id values from our temporary table, customer_orders_temp
 - We then **JOIN** customer_orders_temp with runner_orders_temp on their order_id values
 - The pizza_names table is joined on customer_orders_temp on their pizza_id values
-- Similar to the previous question, we filter pickup_time WHERE it is not NULL to ensure we query successful pickups
+- Similar to the previous question, we filter WHERE pickup_time IS NOT NULL to ensure we query successful pickups
 - We then GROUP BY pizza_id and pizza_name and ORDER BY pizza_id
 
+Results:
 | pizza_id | pizza_name | pizzas_delivered |
 |---|---|---|
 | 1 | Meatlovers | 9 |
@@ -115,6 +119,7 @@ Steps Taken:
   - This is aliased as "vegetarian"
 - We then GROUP BY and ORDER BY customer_id
 
+Results:
 | customer_id | meatlovers | vegetarian |
 |---|---|---|
 | 101 | 2 | 1 |
@@ -152,15 +157,57 @@ Steps Taken:
 - We then GROUP BY order_id and ORDER BY the pizza_id count in descending order
 - Lastly, we limit our results to one to show the maximum numbers of pizzas delievered in a single order
 
-| order_id | meatlovers |
+Results:
+| order_id | max_pizzas_delivered |
 |---|---|
 | 4 | 3 |
 
-- The maximum number of pizzas delievered in a single order was three pizzas on order_id 4
+- The maximum number of pizzas delivered in a single order was three pizzas on order_id 4
 
 ***
 
 **7. For each customer, how many delivered pizzas had at least 1 change and how many had no changes?**
+
+```sql
+SELECT
+  customer_id,
+  COUNT(pizza_id) FILTER(
+    WHERE exclusions IS NOT NULL OR 
+    	  extras IS NOT NULL) AS change,
+  COUNT(pizza_id) FILTER(
+    WHERE exclusions IS NULL AND 
+    	  extras IS NULL) AS no_change
+FROM customer_orders_temp c
+JOIN runner_orders_temp r
+  ON c.order_id = r.order_id
+WHERE pickup_time IS NOT NULL
+GROUP BY customer_id
+ORDER BY customer_id;
+```
+Steps Taken:
+- SELECT the customer_id and two lines where we **COUNT** all pizza_id values from our temporary table, customer_orders_temp
+- On the first COUNT, we apply a FILTER WHERE either `exclusions` or `extras` are not NULL
+  - This is aliased as "change"
+- On the second COUNT, we apply a FILTER WEHRE both `exclusions` and `extras` are NULL
+  - This is aliased as "no_change"
+- We then **JOIN** customer_orders_temp with runner_orders_temp on their order_id values
+- In our WHERE clause, we filter WHERE pickup_time IS NOT NULL
+- We then GROUP BY order_id and ORDER BY the customer_id
+
+Results:
+| customer_id | change | no_change |
+|---|---|---|
+| 101 | 0 | 2 |
+| 102 | 0 | 3 |
+| 103 | 3 | 0 |
+| 104 | 2 | 1 |
+| 105 | 1 | 0 |
+
+- customer_id 101 was delivered two pizzas with no changes
+- customer_id 102 was delivered three pizzas with no changes
+- customer_id 103 was delivered three pizzas with at least one change
+- customer_id 104 was delivered two pizzas with no changes and one pizza with at least one change
+- customer_id 105 was delivered one pizza with at least one change
 
 ***
 
