@@ -1,17 +1,41 @@
 # A. Pizza Metrics
 
+**1. How many pizzas were ordered?**
 
 ```sql
 SELECT
   COUNT(pizza_id) AS ordered_pizzas
 FROM customer_orders_temp;
 ```
+Steps Taken:
+- **COUNT** all pizza_id values from our temporary table, customer_orders_temp
+
+| ordered_pizzas |
+|---|
+| 14 |
+
+- 14 pizzas were ordered total
+
+***
+
+**2. How many unique customer orders were made?**
 
 ```sql
 SELECT
   COUNT(DISTINCT order_id) AS unique_customer_orders
 FROM customer_orders_temp;
 ```
+Steps Taken:
+- **COUNT** all order_id values from our temporary table, customer_orders_temp
+- We add the **DISTINCT** keyword to return unique values
+
+| unique_customer_orders |
+|---|
+| 10 |
+
+- There were 10 unique customer orders
+
+***
 
 ```sql
 SELECT
