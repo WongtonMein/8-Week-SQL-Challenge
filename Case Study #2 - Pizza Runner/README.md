@@ -60,7 +60,7 @@ SELECT
     WHEN extras = '' or extras LIKE 'null' THEN NULL
     ELSE extras
     END AS extras,
-  order_time
+  order_time::datetime
 FROM pizza_runner.customer_orders;
 ```
 
@@ -93,7 +93,7 @@ SELECT
   runner_id,
   CASE
     WHEN pickup_time = '' OR pickup_time LIKE 'null' THEN NULL
-    ELSE pickup_time
+    ELSE pickup_time::datetime
     END AS pickup_time,
   CASE
     WHEN distance = '' OR distance LIKE 'null' THEN NULL
