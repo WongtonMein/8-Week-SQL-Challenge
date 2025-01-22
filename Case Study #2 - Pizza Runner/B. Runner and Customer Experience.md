@@ -126,3 +126,37 @@ ORDER BY runner_id;
 ***
 
 **3. Is there any relationship between the number of pizzas and how long the order takes to prepare?**
+
+```sql
+SELECT
+  c.order_id,
+  COUNT(pizza_id) AS pizza_count,
+  EXTRACT(MINUTE FROM DATE_TRUNC('second', AVG(r.pickup_time - c.order_time))) +
+  ROUND((EXTRACT(SECOND FROM DATE_TRUNC('second', AVG(r.pickup_time - c.order_time))) / 60)::decimal, 2) 
+    AS "avg_arrival_time_(min)",
+  (EXTRACT(MINUTE FROM DATE_TRUNC('second', AVG(r.pickup_time - c.order_time))) +
+  ROUND((EXTRACT(SECOND FROM DATE_TRUNC('second', AVG(r.pickup_time - c.order_time))) / 60)::decimal, 2)) / COUNT(pizza_id) 
+    AS "avg_arrival_time_per_pizza_(min)"
+FROM customer_orders_temp c
+JOIN runner_orders_temp r
+  ON c.order_id = r.order_id
+GROUP BY c.order_id
+ORDER BY c.order_id;
+```
+
+Steps Taken:
+ - TBD
+
+Results:
+| order_id | pizza_count | avg_arrival_time_(min) | avg_arrival_time_per_pizza_(min) |
+|---|---|---|---|
+| 1 | 1 | 10.53 | 10.53 |
+| 2 | 1 | 10.03 | 10.03 |
+| 3 | 2 | 21.23 | 10.615 |
+| 4 | 3 | 29.28 | 9.76 |
+| 5 | 1 | 10.47 | 10.47 |
+| 6 | 1 | null | null |
+| 7 | 1 | 10.27 | 10.27 |
+| 8 | 1 | 20.48 | 20.48 |
+| 9 | 1 | null | null |
+| 10 | 2 | 15.52 | 7.76 |
