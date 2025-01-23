@@ -284,4 +284,19 @@ ORDER BY runner_id;
 ```
 
 Steps Taken:
+ - We will build a CTE with the runner_id, a COUNT of the order_id aliased as all_orders, and a COUNT of the order_id where we utilize a FILTER to exclude any rows where duration is NULL
+ - In our main SELECT statement, we SELECT the runner_id and calculate the percentage of successful deliveries by dividing the successful_orders by all_orders
+  - Note, I concatenated a '%' symbol, but this is not necessary
+  - Otherwise remove the "|| '%'" and change the "* 100.0" to "* 1.0"
+- WE THEN GROUP BY the runner_id, successful_orders, and all_orders and ORDER BY the runner_id
 
+Results:
+| runner_id | percent_successful_orders |
+|---|---|
+| 1 | 100.00% |
+| 2 | 75.00% |
+| 3 | 50.00% |
+
+- runner_id 1 has a 100.00% successful delivery rate
+- runner_id 2 has a 75.00% successful delivery rate
+- runner_id 3 has a 50.00% successful delivery rate
