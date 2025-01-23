@@ -115,3 +115,7 @@ FROM pizza_runner.runner_orders;
 ```
 
 ![Alt text](https://github.com/WongtonMein/8-Week-SQL-Challenge/blob/main/Case%20Study%20%232%20-%20Pizza%20Runner/Wk2%20-%20runner_orders_temp_table.png)
+
+***
+
+Click [here](https://github.com/WongtonMein/8-Week-SQL-Challenge/blob/main/Case%20Study%20%232%20-%20Pizza%20Runner/A.%20Pizza%20Metrics.md) to view my solutions to A. Pizza Metrics.
