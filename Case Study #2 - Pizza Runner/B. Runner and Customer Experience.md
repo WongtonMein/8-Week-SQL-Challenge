@@ -128,35 +128,160 @@ ORDER BY runner_id;
 **3. Is there any relationship between the number of pizzas and how long the order takes to prepare?**
 
 ```sql
+WITH pizza_prep_cte AS (
+  SELECT
+    c.order_id,
+    COUNT(c.order_id) AS pizza_count,
+    EXTRACT(MINUTE FROM DATE_TRUNC('second', (r.pickup_time - c.order_time))) +
+    ROUND((EXTRACT(SECOND FROM DATE_TRUNC('second', (r.pickup_time - c.order_time))) / 60)::decimal, 2) AS pizza_prep_time
+  FROM customer_orders_temp c
+  JOIN runner_orders_temp r
+    ON c.order_id = r.order_id
+  GROUP BY c.order_id, r.pickup_time, c.order_time
+  ORDER BY order_id
+)
+
 SELECT
-  c.order_id,
-  COUNT(pizza_id) AS pizza_count,
-  EXTRACT(MINUTE FROM DATE_TRUNC('second', AVG(r.pickup_time - c.order_time))) +
-  ROUND((EXTRACT(SECOND FROM DATE_TRUNC('second', AVG(r.pickup_time - c.order_time))) / 60)::decimal, 2) 
-    AS "avg_arrival_time_(min)",
-  (EXTRACT(MINUTE FROM DATE_TRUNC('second', AVG(r.pickup_time - c.order_time))) +
-  ROUND((EXTRACT(SECOND FROM DATE_TRUNC('second', AVG(r.pickup_time - c.order_time))) / 60)::decimal, 2)) / COUNT(pizza_id) 
-    AS "avg_arrival_time_per_pizza_(min)"
-FROM customer_orders_temp c
-JOIN runner_orders_temp r
-  ON c.order_id = r.order_id
-GROUP BY c.order_id
-ORDER BY c.order_id;
+  pizza_count,
+  ROUND(AVG(pizza_prep_time)::integer,2) AS avg_pizza_prep_time
+FROM pizza_prep_cte
+GROUP BY pizza_count
+ORDER BY pizza_count
 ```
 
 Steps Taken:
- - TBD
+ - We will build a CTE with the order_id, a COUNT of the order_id values, and a similar query to the previous question to determine the pizza preparation time in minutes (pizza_prep_time)
+- We JOIN the customer_orders_temp and the runner_orders_temp tables on their order_id values
+ - We then GROUP BY the order_id, pickup_time, and order_time and ORDER BY the order_id
+ - In our main SELECT statement, we will SELECT the pizza_count and take the average of the pizza_prep_time rounded to two decimals
+ - We GROUP BY and ORDER BY the pizza_count
 
 Results:
-| order_id | pizza_count | avg_arrival_time_(min) | avg_arrival_time_per_pizza_(min) |
+| pizza_count | avg_pizza_prep_time |
+|---|---|
+| 1 | 12.00 |
+| 2 | 18.00 |
+| 3 | 29.00 |
+
+ - Preparing one pizza takes 12.00 minute on average
+ - Preparing two pizzas takes 18.00 minutes on average
+ - Preparing three pizzas takes 29.00 minutes on average
+
+***
+
+**4. What was the average distance travelled for each customer?**
+
+```sql
+SELECT
+  customer_id,
+  ROUND(AVG(distance), 2) AS avg_distance
+FROM customer_orders_temp c
+JOIN runner_orders_temp r
+  ON c.order_id = r.order_id
+GROUP BY customer_id
+ORDER BY customer_id;
+```
+
+Steps Taken:
+ - We SELECT the customer_id and take the average distance travelled rounded to two decimals
+ - We JOIN the customer_orders_temp and the runner_orders_temp tables on their order_id values
+ - We then GROUP BY and ORDER BY the customer_id
+
+Results:
+| customer_id | avg_distance |
+|---|---|
+| 101 | 20.00 |
+| 102 | 16.73 |
+| 103 | 23.40 |
+| 104 | 10.00 |
+| 105 | 15.00 |
+
+- The average distance travelled to customer_id 101 is 20.00 kilometers
+- The average distance travelled to customer_id 102 is 16.73 kilometers
+- The average distance travelled to customer_id 103 is 23.40 kilometers
+- The average distance travelled to customer_id 104 is 10.00 kilometers
+- The average distance travelled to customer_id 105 is 25.00 kilometers
+
+***
+
+**5. What was the difference between the longest and shortest delivery times for all orders?**
+
+```sql
+SELECT
+  MIN(duration) AS min_delivery_time,
+  MAX(duration) AS max_delivery_time,
+  MAX(duration) - MIN(duration) AS diff_btwn_max_and_min_duration
+FROM runner_orders_temp
+```
+
+Steps Taken:
+ - We query the MIN() and MAX() values of the `duration` column and the difference between MAX() and MIN()
+
+| min_delivery_time | max_delivery_time | diff_btwn_max_and_min_duration |
+|---|---|---|
+| 10 | 40 | 30 |
+
+- The difference between the longest and shortest delivery times for all orders is 30 minutes
+
+***
+
+**6. What was the average speed for each runner for each delivery and do you notice any trend for these values?**
+
+```sql
+SELECT
+  runner_id,
+  distance,
+  duration,
+  ROUND(distance / (duration / 60.0), 2) AS km_per_hr
+FROM runner_orders_temp
+WHERE duration IS NOT NULL
+ORDER BY runner_id, order_id;
+```
+
+Steps Taken:
+ - SELECT the runner_id, distance, and duration columns
+ - The average speed each runner_id delivered each order is then calculated
+ - A WHERE clause is added to exclude any orders with a NULL duration value
+ - We then ORDER BY the runner_id as well as the order_id
+
+Results:
+| runner_id | distance | duration | km_per_hr |
 |---|---|---|---|
-| 1 | 1 | 10.53 | 10.53 |
-| 2 | 1 | 10.03 | 10.03 |
-| 3 | 2 | 21.23 | 10.615 |
-| 4 | 3 | 29.28 | 9.76 |
-| 5 | 1 | 10.47 | 10.47 |
-| 6 | 1 | null | null |
-| 7 | 1 | 10.27 | 10.27 |
-| 8 | 1 | 20.48 | 20.48 |
-| 9 | 1 | null | null |
-| 10 | 2 | 15.52 | 7.76 |
+| 1 | 20 | 32 | 37.50 |
+| 1 | 20 | 27 | 44.44 |
+| 1 | 13.4 | 20 | 40.20 |
+| 1 | 10 | 10 | 60.00 |
+| 2 | 23.4 | 40 | 35.10 |
+| 2 | 25 | 25 | 60.00 |
+| 2 | 23.4 | 15 | 93.60 |
+| 3 | 10 | 15 | 40.00 |
+
+ - runner_id 1's average speed ranged from 37.50 km/hr to 60.00 km/hr
+ - runner_id 2's average speed ranged from 35.10 km/hr to 93.60 km/hr
+ - runner_id 3 has only delivered one order so their average speed is 40.00 km/hr
+
+***
+
+**7. What is the successful delivery percentage for each runner?**
+
+```sql
+WITH order_success_cte AS (
+  SELECT
+    runner_id,
+    COUNT(order_id) AS all_orders,
+    COUNT(order_id) FILTER(WHERE duration IS NOT NULL) AS successful_orders
+  FROM runner_orders_temp
+  GROUP BY runner_id
+  ORDER BY runner_id
+)
+
+SELECT
+  runner_id,
+  ROUND(successful_orders * 100.0 / all_orders, 2) || '%' AS percent_successful_orders
+FROM order_success_cte
+GROUP BY runner_id, successful_orders, all_orders
+ORDER BY runner_id;
+```
+
+Steps Taken:
+
