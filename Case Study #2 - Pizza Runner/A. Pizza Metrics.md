@@ -303,3 +303,7 @@ Results:
 - Three pizzas were ordered on the 5th day of the week, Thursday
 - One pizza was ordered on the 6th day of the week, Friday
 - Five pizzas were ordered on the 7th day of the week, Saturday
+
+***
+
+Click [here](https://github.com/WongtonMein/8-Week-SQL-Challenge/blob/main/Case%20Study%20%232%20-%20Pizza%20Runner/B.%20Runner%20and%20Customer%20Experience.md) to view my solutions to B. Runner and Customer Experience.
