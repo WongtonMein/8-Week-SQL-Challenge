@@ -300,3 +300,7 @@ Results:
 - runner_id 1 has a 100.00% successful delivery rate
 - runner_id 2 has a 75.00% successful delivery rate
 - runner_id 3 has a 50.00% successful delivery rate
+
+***
+
+Click [here](https://github.com/WongtonMein/8-Week-SQL-Challenge/blob/main/Case%20Study%20%232%20-%20Pizza%20Runner/C.%20Ingredient%20Optimisation.md) to view my solutions to C. Ingredient Optimisation.
